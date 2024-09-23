@@ -13,77 +13,79 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.finalSprint.product.exceptions.InvalidValueException;
 import com.finalSprint.product.model.Product;
 import com.finalSprint.product.service.ProductServices;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-	
+
 	@Autowired
 	private ProductServices service;
-	
+
 	@GetMapping
 	public String getMessage() {
-		
+
 		return "OK:200";
 	}
-	
+
 	// add products
 	@PostMapping("/addproduct")
-	public Product addProduct(@RequestBody Product product) {
+	public Product addProduct(@RequestBody Product product) throws InvalidValueException, Exception {
 		return service.addOrUpdateProduct(product);
 	}
-	
-	//view all products
+
+	// view all products
 	@GetMapping("/viewproducts")
-	public List<Product> showProducts(){
+	public List<Product> showProducts() {
 		return service.findAll();
 	}
-	
-	//filter by id
+
+	// filter by id
 	@GetMapping("/{pid}")
-	public Product ProductById(@PathVariable ("pid") long pid) {
+	public Product ProductById(@PathVariable("pid") long pid) throws InvalidValueException, Exception {
 		return service.getProductById(pid);
 	}
-	
 
-	//filter by name
+	// filter by name
 	@GetMapping("/name/{name}")
-	public Optional<Product> ProductByName(@PathVariable("name") String name) {
+	public Optional<Product> ProductByName(@PathVariable("name") String name) throws InvalidValueException, Exception {
 		return service.getProductByName(name);
 	}
 
-	//filter by price
+	// filter by price
 	@GetMapping("/price/{price}")
 	public List<Product> ProductByPrice(@PathVariable("price") double price) {
 		return service.getProductByPrice(price);
 	}
-	
-	//filter products less than price
+
+	// filter products less than price
 	@GetMapping("/productbelow/{price}")
-	public List<Product> ProductLessThan(@PathVariable("price") double price){
+	public List<Product> ProductLessThan(@PathVariable("price") double price) {
 		return service.getProductLessThan(price);
 	}
-	
-	//update product
+
+	// update product
 	@PutMapping("/update/{pid}")
-	public ResponseEntity<Product> modifyProduct(@PathVariable long pid , @RequestBody Product productDetails) {
+	public ResponseEntity<Product> modifyProduct(@PathVariable long pid, @RequestBody Product productDetails)
+			throws InvalidValueException, Exception {
 		Product updateProduct = service.UpdateProduct(pid, productDetails);
 		return ResponseEntity.ok(updateProduct);
 	}
-	
-	//delete product by id
+
+	// delete product by id
 	@GetMapping("/delete/{pid}")
-	public void deleteById(@PathVariable ("pid") long pid) {
+	public void deleteById(@PathVariable("pid") long pid) throws InvalidValueException, Exception {
 		service.deleteById(pid);
 	}
-	
+
 	// subtract product
 	@PostMapping("/subproduct")
-	public ResponseEntity<Product> subtractProduct(@RequestBody Product product){
+	public ResponseEntity<Product> subtractProduct(@RequestBody Product product)
+			throws InvalidValueException, Exception {
 		Optional<Product> updateProduct = service.subtractProduct(product);
 		return ResponseEntity.ok(updateProduct.get());
 	}
-	
+
 }
