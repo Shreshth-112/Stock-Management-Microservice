@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: spring-cloud-gateway-app
+  cloud:
+    gateway:
+      routes:
+        - id: customer-route
+          uri: http://localhost:8770
+          predicates:
+            - Path=/customer/**
+        - id: dispatch-route
+          uri: http://localhost:8772
+          predicates:
+            - Path=/dispatch/**
+        - id: supplier-route
+          uri: http://localhost:8771
+          predicates:
+            - Path=/supplier/**
+        - id: supplier-route
+          uri: http://localhost:8087
+          predicates:
+          - Path=/product/**
+server:
+  port: 8073
